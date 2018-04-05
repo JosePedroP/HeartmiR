@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+	<title>micorr</title>
+</h:head>
+<h:body onload="fillTable()">
+
+<h:form id="sc">
+	
+	
+	MICORR!
+	<br/>
+	<h:inputTextarea id="searchText" rows="8" cols="39" value="#{corrBean.seachIds}" style="font-family:Trebuchet MS;font-size:0.8em;background-color:#E4E5E6">
+	</h:inputTextarea>
+	<br/>
+	<p:commandButton id="test" update="sc:corrs" action="#{corrBean.searchForGenes}"/>
+	
+	
+	<p:outputPanel id="corrs">
+		<br/>
+		<ui:repeat var="cor" value="#{corrBean.corrs}">
+			<ui:fragment>
+				<p:outputPanel rendered="true">
+					Probe: #{cor.id1}
+					<br/>
+					Gene Symbol: #{cor.id2}
+					<br/>
+					Name: #{cor.id3}
+					<br/>
+					Gene Id: #{cor.geneId}
+					<br/>
+				
+					<table border="1">
+						<tr>
+							<td>Micro RNA</td>
+							<td>Pearson</td>
+							<td>Ranking</td>
+							<td>Rank</td>
+						</tr>
+						<ui:repeat var="crr" value="#{cor.corrs}">
+							<ui:fragment>
+								<tr>
+									<td>#{crr.id1}</td>
+									<td>#{crr.pearson}</td>
+									<td>#{crr.ranking}</td>
+									<td>#{crr.rank}</td>
+								</tr>
+							</ui:fragment>
+						</ui:repeat>
+					</table>
+				<br/>
+					
+				</p:outputPanel>
+					
+					
+				
+			
+				
+			</ui:fragment>
+		</ui:repeat>
+	
+	</p:outputPanel>
+
+</h:form>
+</h:body>
+</html>

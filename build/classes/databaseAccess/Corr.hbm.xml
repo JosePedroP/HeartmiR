@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 7/nov/2016 14:40:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="databaseAccess.Corr" table="corr" catalog="micorr">
+        <id name="id" type="java.lang.Integer">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="microrna" class="databaseAccess.Microrna" fetch="select">
+            <column name="microrna_id" not-null="true" />
+        </many-to-one>
+        <many-to-one name="genes" class="databaseAccess.Genes" fetch="select">
+            <column name="genes_id" not-null="true" />
+        </many-to-one>
+        <property name="scoremrnaorg" type="java.lang.Double">
+            <column name="scoremrnaorg" precision="22" scale="0" />
+        </property>
+        <property name="scorepita" type="java.lang.Double">
+            <column name="scorepita" precision="22" scale="0" />
+        </property>
+        <property name="scoremirdb" type="java.lang.Double">
+            <column name="scoremirdb" precision="22" scale="0" />
+        </property>
+        <property name="scoretscan" type="java.lang.Double">
+            <column name="scoretscan" precision="22" scale="0" />
+        </property>
+        <property name="kendall" type="java.lang.Double">
+            <column name="kendall" precision="22" scale="0" />
+        </property>
+        <property name="kendalldev" type="java.lang.Double">
+            <column name="kendalldev" precision="22" scale="0" />
+        </property>
+        <property name="experiments" type="string">
+            <column name="experiments" length="240" />
+        </property>
+        <property name="supporttype" type="string">
+            <column name="supporttype" length="45" />
+        </property>
+        <property name="referencespmid" type="string">
+            <column name="referencespmid" length="45" />
+        </property>
+        <property name="ranking" type="double">
+            <column name="ranking" precision="22" scale="0" not-null="true" />
+        </property>
+        <property name="rank" type="int">
+            <column name="rank" not-null="true" />
+        </property>
+        <property name="pubmedid" type="string">
+            <column name="pubmedid" length="45" />
+        </property>
+        <property name="hd" type="java.lang.Boolean">
+            <column name="hd" />
+        </property>
+        <property name="tf" type="java.lang.Boolean">
+            <column name="tf" />
+        </property>
+    </class>
+</hibernate-mapping>

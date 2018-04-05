@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 7/nov/2016 14:40:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="databaseAccess.Genes" table="genes" catalog="micorr">
+        <id name="id" type="java.lang.Integer">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <property name="probe" type="string">
+            <column name="probe" length="45" />
+        </property>
+        <property name="symbol" type="string">
+            <column name="symbol" length="120" />
+        </property>
+        <property name="name" type="string">
+            <column name="name" length="160" />
+        </property>
+        <property name="geneId" type="int">
+            <column name="geneId" not-null="true" />
+        </property>
+        <set name="corrs" table="corr" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="genes_id" not-null="true" />
+            </key>
+            <one-to-many class="databaseAccess.Corr" />
+        </set>
+        <set name="geneexpressions" table="geneexpression" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="genes_id" not-null="true" />
+            </key>
+            <one-to-many class="databaseAccess.Geneexpression" />
+        </set>
+    </class>
+</hibernate-mapping>

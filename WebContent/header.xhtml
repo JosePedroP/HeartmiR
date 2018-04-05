@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+  	<title>Header</title>
+	<link rel="stylesheet" type="text/css" href="./css/cos.css"/>
+</h:head>
+<h:body>
+	<br/>
+	<p align="center">
+		<a href="startpage.jsf">
+			<img src="./images/HeartmiR_2.png" style="width: 30%;" alt="unihi-logo" border="0"/>
+		</a>
+	</p>
+	<br/>
+	<p:toolbar>
+		<p:toolbarGroup align="left" style="padding-left:30px">
+			<p:commandButton type="button" value="Search Genes/miRs" onclick="window.location=document.getElementById('clickMeToo1').href;"/>
+        	<p:commandButton type="button" value="Search Interaction" onclick="window.location=document.getElementById('clickMeToo2').href;"/>
+        	<p:commandButton type="button" value="Help" onclick="window.location=document.getElementById('clickMeToo3').href;"/>
+		</p:toolbarGroup>
+	</p:toolbar>
+	
+	<p:outputPanel id="linkater" style="display:none">
+		<a href="startpage.jsf" id="clickMeToo1">startpage.jsf</a>
+		<a href="startpagecor.jsf" id="clickMeToo2">startpagecor.jsf</a>
+		<a href="help.jsf" id="clickMeToo3">help.jsf</a>
+	</p:outputPanel>
+	
+	
+</h:body></html>

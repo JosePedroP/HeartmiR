@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+	<title>HeartmiR</title>
+	<script src="plotly-latest.min.js"></script>
+	<script src="heatmap.js" type="text/javascript"/>
+	<script src="sorttable.js" type="text/javascript"/>
+</h:head>
+<h:body>
+
+<h:form id="sc">
+	
+	
+	<ui:include src="header.xhtml"/>
+	<div id="loading-image" style="position:absolute;border:1px;solid;top:35%;left:25%;display:none;z-index:1"><img src="./images/progress.gif" /></div>
+	<div style="padding-left:30px!important;">
+		<br/>
+		<b>mRNA</b>
+		<br/>
+		<h:inputTextarea id="searchText1" rows="1" cols="10" value="#{corrBean.mrna}" style="font-family:Trebuchet MS;font-size:0.8em;background-color:#E4E5E6">
+		</h:inputTextarea>
+		<br/>
+		<b>miRNA</b>
+		<br/>
+		<h:inputTextarea id="searchText2" rows="1" cols="10" value="#{corrBean.mirna}" style="font-family:Trebuchet MS;font-size:0.8em;background-color:#E4E5E6">
+		</h:inputTextarea>
+		<br/>
+		<p:commandButton id="b1" update="sc:corrs" action="#{corrBean.searchForCorr}" onclick="showload()" oncomplete="drawSinglePlot()" value="Search"/>
+		<br/>
+	</div>
+	<p:outputPanel id="corrs">
+	
+		
+	
+		<br/>
+		<p:outputPanel id="nomatch" rendered="#{corrBean.nomatch}">
+			<div style="padding-left:30px!important;">
+				<b>No match found.</b>
+			</div>
+		</p:outputPanel>
+		<br/>
+		<p:outputPanel id="match" rendered="#{corrBean.render}">
+			<div style="padding-left:30px!important;">
+				<b>Gene symbol:</b> 
+				<h:outputLink value="https://www.ncbi.nlm.nih.gov/gene?cmd=Retrieve&amp;dopt=full_report&amp;list_uids=#{corrBean.corsearch[5]}" target="_new">
+					#{corrBean.corsearch[3]}
+				</h:outputLink>
+				<br/>
+				<b>Gene probe:</b> #{corrBean.corsearch[2]}
+				<br/>
+				<b>Gene name:</b> #{corrBean.corsearch[4]}
+				<br/>
+				<b>Gene id:</b> #{corrBean.corsearch[5]}
+				<br/>
+				<b>miRNA ver20:</b> 
+				<h:outputLink value="http://mirbase.org/cgi-bin/mature.pl?mature_acc=#{corrBean.corsearch[10]}" target="_new">
+					#{corrBean.corsearch[6]}
+				</h:outputLink>
+				<br/>
+				<b>miRNA affy id:</b> #{corrBean.corsearch[7]}
+				<br/>
+				<b>miRNA Tid array desgin:</b> #{corrBean.corsearch[8]}
+				<br/>
+				<b>Kendall:</b> #{corrBean.corsearch[0]}
+				<br/>
+				<b>Kendall dev:</b> #{corrBean.corsearch[1]}
+			</div>
+			<input id="plot" value="#{corrBean.corsearch[9]}" type="hidden"/>
+			<div id="plotdiv"></div>
+		</p:outputPanel>
+	</p:outputPanel>
+	<br/><br/>
+	<ui:include src="header2.xhtml"/>
+
+
+</h:form>
+</h:body>
+</html>

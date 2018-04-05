@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+	<title>micorr</title>
+</h:head>
+<h:body onload="fillTable()">
+
+<h:form id="sc">
+	
+	
+	MICORR 2!
+	
+	<h:form id="corrs">
+		#{corrBean.gonadoit}
+		<ui:repeat var="ttc" value="#{corrBean.corrs}">
+			<ui:fragment>
+				PEPE!
+			</ui:fragment>
+		</ui:repeat>
+	
+	</h:form>
+	
+	<p:commandButton id="test" update="sc:corrs" action="#{corrBean.searchForGenes}"/>
+
+</h:form>
+</h:body>
+</html>

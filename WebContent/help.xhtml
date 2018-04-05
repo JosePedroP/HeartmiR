@@ -1,0 +1,293 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+   xmlns:h="http://java.sun.com/jsf/html"
+   xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:p="http://primefaces.org/ui"
+   xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+	<title>HeartmiR</title>
+	<script src="plotly-latest.min.js"></script>
+	<script src="heatmap.js" type="text/javascript"/>
+	<script src="sorttable.js" type="text/javascript"/>
+	<link href="./css/cos.css" rel="stylesheet" type="text/css"/>
+</h:head>
+<h:body>
+
+<h:form id="sc">
+	
+	
+	<ui:include src="header.xhtml"/>
+	<div style="padding-left:30px!important;padding-right:30px!important;">
+	
+		<h1 style="color: #cc0000;">What is HeartmiR?</h1>
+		
+		<p>Welcome to <b style="color: #cc0000;">Heart</b><b>miR</b>, a webserver that allows for the query of 
+		both microRNAs (miR) and mRNAs in order to identify relevant miR-mRNA interactions in the context of late
+		heart development in mouse (<i>Mus musculus</i>). <b style="color: #cc0000;">Heart</b><b>miR</b> is based 
+		on the integration of a large number of potential miRNA-mRNAs interactions derived from experimental and 
+		computational approaches with a unique dataset comprising time-resolved dual expression profiles of microRNAs 
+		and mRNAs during murine heart development. More specifically, interactions were retrieved from five 
+		different resources and evaluated based on parallel expression profiling of 9211 mRNA and 386 
+		microRNAs during the development period (from E10.5 to E19.5) and additionally in adult and old murine 
+		heart tissue.</p>
+		
+		<p><b style="color: #cc0000;">Heart</b><b>miR</b> is designed to serve as comprehensive tool for query, 
+		visualisation and identification of relevant miR-mRNA interactions for heart development. Its use is 
+		intuitive: To proceed with the analysis, the user inputs gene symbols or Entrez Gene IDs (according to 
+		NCBI annotation) or microRNA IDs (according to miRBase) of interest and can search for mRNAs targeted 
+		by input miRs, miRs targeting input mRNAs or both.</p>
+		
+		<p>After the search is carried out, <b style="color: #cc0000;">Heart</b><b>miR</b> presents the 
+		results in tables including identified miR-mRNA interactions, their correlation, experimental validation, 
+		and relative predictor scores, as well as indications whether target genes have been associated with heart 
+		development or transcriptional regulation. This combined information enables the user to assess the 
+		relevance of the retrieved interactions. To refine the search, a threshold for absolute Kendall's 
+		correlation can be specified (default value is 0.4).</p>
+		
+		<p>Furthermore, expression levels for miR – mRNA pairs can be visualised both as line plots and compact 
+		heat maps. Finally, all retrieved interactions can be downloaded for further inspection.</p>
+		
+		<h1 style="color: #cc0000;">What data is included in HeartmiR?</h1>
+		
+		<p><b style="color: #cc0000;">Heart</b><b>miR</b> is based on the integration of a large number of 
+		potential miR-mRNA interactions derived from experimental and computational approaches with a unique 
+		gene expression data set, which includes parallel system wide measurement of mRNA and miR levels in 
+		the murine heart during development.</p>
+		
+		<h2 style="color: #cc0000;">miRNA-mRNA interactions</h2>
+		
+		<p>We gathered five different datasets of miR-mRNA interactions that are publically available and based 
+		on experiments or computational predictions. Each dataset was individually analysed and filtered according 
+		to authors' recommendations in order to obtain interactions of high confidence. The datasets were treated 
+		as follows:</p>
+		
+		<ul>
+			<li>
+				<h:outputLink value="https://www.microrna.org"><b>microRNA.org</b></h:outputLink>: 
+				Two files were obtained from microRNA.org <h:outputLink value="https://www.microrna.org/microrna/getDownloads.do">download page</h:outputLink>.
+				These files were labelled in microRNAs.org as ""Good mirSVR score, Conserved miRNA" and the "Good mirSVR score, 
+				Non-conserved miRNA". Interactions were subsequently merged into a single list and duplicated interactions were 
+				removed. To increase confidence, we removed all interactions that had a mirSVR score higher than -0.1 following 
+				the <h:outputLink value="https://www.microrna.org/microrna/getDownloads.do">indications given by creators of 
+				microRNAs.org</h:outputLink>.
+			</li>
+			<li>
+				<h:outputLink value="https://genie.weizmann.ac.il/pubs/mir07/index.html"><b>Pita</b></h:outputLink>: 
+				The file for mouse miR targets in mouse was obtained from the 
+				<h:outputLink value="https://genie.weizmann.ac.il/pubs/mir07/catalogs/PITA_sites_mm9_0_0_ALL.tab.gz">
+				Pita Download Predictions Page</h:outputLink>. A minimal score of -10 was set according to the authors' 
+				specifications in the <h:outputLink value="https://genie.weizmann.ac.il/pubs/mir07/index.html">
+				FAQ/Notes page</h:outputLink>.
+			</li>
+			<li>
+				<h:outputLink value="http://www.mirdb.org/miRDB/index.html"><b>miRDB</b></h:outputLink>: The  
+				<h:outputLink value="http://www.mirdb.org/miRDB/download/miRDB_v5.0_prediction_result.txt.gz">most recent version of 
+				miRDB</h:outputLink> was downloaded. According to the authors, stated in the same page, a gene with a score higher 
+				that 50 can be considered to be likely a miR target. Therefore, we used only interaction that had a score higher 
+				than 50 to be included in <b style="color: #cc0000;">Heart</b><b>miR</b>.
+			</li>
+			<li>
+				<h:outputLink value="http://www.targetscan.org/mmu_71/"><b>TargetScan</b></h:outputLink>: A
+				<h:outputLink value="http://www.targetscan.org/mmu_71/mmu_71_data_download/Summary_Counts.all_predictions.txt.zip">
+				summary file</h:outputLink> was retrieved and interactions miRNA-mRNA interactions for Mus musculus were extracted. 
+				Finally, only interactions with "Cumulative weighted context++ score" lower than -0.1 were taken to increase 
+				prediction confidence as <h:outputLink value="https://elifesciences.org/content/4/e05005">advised by the authors</h:outputLink>.
+			</li>
+			<li>
+				<h:outputLink value="http://mirtarbase.mbc.nctu.edu.tw/"><b>MirTarBase</b></h:outputLink>: miRNA-mRNA interactions 
+				based on experimental data were <h:outputLink value="http://mirtarbase.mbc.nctu.edu.tw/cache/download/6.1/mmu_MTI.xls">
+				downloaded from MirTarBase Version 6.1</h:outputLink>. The full set of interactions was included in 
+				<b style="color: #cc0000;">Heart</b><b>miR</b>.
+			</li>
+		</ul>
+		
+		<p>For all datasets, duplicated interactions were removed and miRNA targets were commonly mapped to their gene Symbol and Entrez Gene 
+		ID for simpler identification.</p>
+		
+		<p>Next, we integrated the interactions with our gene expression data for heart development in mouse. We only kept interactions 
+		for which the corresponding mRNAs and miRNAs have higher expression than 32 units for at least one time point during the time 
+		course experiment (See Sabour &amp; Machado et al., 2016 for more information). To facilitate interpretation, scores were ranked 
+		according to their relative value for each of the computationally derived interaction sets. The top 1% interactions are given 
+		the rank of 1, the top 1-2% are ranked as 2 and so on.</p>
+		
+		<p>After filtering, the final numbers of imported interactions from the different resources together with the corresponding 
+		publication are following:</p>
+		
+		<table border="1">
+			<thead>
+				<tr align="center">
+					<td><b>Tools</b></td>
+					<td><b>Number of Interactions</b></td>
+					<td><b>Publication</b></td>
+					<td><b>PubMed ID</b></td>
+				</tr>
+			</thead>
+			<tr align="center">
+				<td>microRNA.org</td>
+				<td>92141</td>
+				<td>Betel et al.2010, Gen Biology 2010</td>
+				<td><h:outputLink value="https://www.ncbi.nlm.nih.gov/pubmed/20799968">20799968</h:outputLink></td>
+			</tr>
+			<tr align="center">
+				<td>Pita</td>
+				<td>19615</td>
+				<td>Kertesz et al. Nature Genetics. 2007</td>
+				<td><h:outputLink value="https://www.ncbi.nlm.nih.gov/pubmed/17893677">17893677</h:outputLink></td>
+			</tr>
+			<tr align="center">
+				<td>miRDB</td>
+				<td>68035</td>
+				<td>Wong &amp; Wang et al. NAR 2015</td>
+				<td><h:outputLink value="https://www.ncbi.nlm.nih.gov/pubmed/25378301">25378301</h:outputLink></td>
+			</tr>
+			<tr align="center">
+				<td>TargetScan</td>
+				<td>18612</td>
+				<td>Agarwal et al. eLIFE 2015</td>
+				<td><h:outputLink value="https://www.ncbi.nlm.nih.gov/pubmed/26267216">26267216</h:outputLink></td>
+			</tr>
+			<tr align="center">
+				<td>MirTarBase</td>
+				<td>13027</td>
+				<td>Chou et al. NAR 2016</td>
+				<td><h:outputLink value="https://www.ncbi.nlm.nih.gov/pubmed/26590260">26590260</h:outputLink></td>
+			</tr>
+		</table>
+		
+		<h2 style="color: #cc0000;">Dual miR and mRNA transcriptome</h2>
+		
+		<p>The gene expression data set was obtained from Affymetrix Gene Chips measurements (microarray of mRNAs 
+		and miRs during the development period (from E10.5 to E19.5) and additionally includes measurements of 
+		adult and old murine heart tissue. To reduce noise in the data, only mRNAs and miRs with an absolute value 
+		of 32 in at least one time point were considered as being expressed. The miR and mRNA parallel expression 
+		profiling combined with the retrieved validated and experimental interaction were used  to assess 9211 mRNAs 
+		and 386 miRs surpassing the expression threshold.  Correlation between mRNAs and miRs was calculated using 
+		Kendall rank correlation, which provides a more robust measure for similarity of expression profiles compared 
+		to standard Pearson correlation. Furthermore, we calculated alternative  Kendall correlation coefficients for 
+		developmental time points only ("Kendall Dev") and for the all experiment series ("Kendall")</p>
+		
+		<p>Additional information was added to the mRNAs to indicate if they participate in processes related to heart 
+		development or transcription regulation based on their Gene Ontology annotation.</p>
+		
+		<h1 style="color: #cc0000;">Querying HeartmiR</h1>
+		
+		<p>For querying, <b style="color: #cc0000;">Heart</b><b>miR</b> presents two main options: (i) <b>Search Genes/miRs</b> 
+		and (ii) <b>Search Interaction</b>.</p>
+		
+		<p>The <b>search Genes/miRs</b> displays a web page where mRNA or miR identifiers can be used as input. Currently, 
+		mRNAs can be searched using Gene Name, Gene Symbol, Entrez Gene ID (according to NCBI annotation) and Affymetrix 
+		ID. The miRNAs can be searched using miRBase ID, Affymetrix ID and Transcript ID. Moreover, the user can set a 
+		threshold for absolute correlation (“Kendall”), resulting in the exclusion of interactions with lower correlation 
+		between miRNA and the corresponding target mRNA. Thus, using for instance, a threshold of 0.4, only miR-mRNA 
+		interactions that have a Kendall correlation higher than 0.4 or lower than -0.4 will be shown. By default, this 
+		value is set to 0.4.</p> 
+
+		<p>Once the search parameters are set, the user  presses one of the three search buttons accordingly to the input data: 
+		(i) <b>Search Genes</b> and (ii) <b>Search microRNAs</b> attempt to match the input identifiers either with genes and 
+		miRs in the database respectively; while the (iii) <b>Search Both</b> matches the input both to miRs and mRNA and 
+		performs the search. Please note that queries using the <b>Search Both</b> ooption are slower than the other two options, 
+		so we recommend only using it if the query includes a combination of gene and microRNA identifiers.</p>
+		
+		<img src="./images/HeartmiR1_1.png" border="0"/>
+		
+		<h1 style="color: #cc0000;">Interaction profiling</h1>
+		
+		<p>The query results are displayed in two tabs: <b>Correlation</b> and <b>Expression Heatmaps</b>. In the first, 
+		the retrieved interactions for the queried mRNAs and miRs are displayed along the corresponding scores, correlation 
+		measures and information in tables. In the example case, two genes (Fam122b and Smoc2) serve as  input. 
+		Performing the query leads to the display of miRNAs targeting these genes. In the alternative case that 
+		miRNA identifiers are used as input, <b style="color: #cc0000;">Heart</b><b>miR</b> displays all protein-coding 
+		genes targeted by the given miRNAs.</p>
+
+		<p>In the tables, following information can be found:</p>
+
+		<ul>
+			<li>
+				<b>Kendall</b> and <b>Kendall Dev</b> values, i.e. the Kendall correlation of the miR-mRNA pairs using 
+				the full time series (including adult and old heart tissue) or development time points only, respectively. 
+				Positive values indicate similarity of expression profiles, while negative values indicate anti-correlation 
+				of expression profiles and suggest potential repression of the target mRNA by the miRNA.
+			</li>
+			<li>
+				The columns <b>Support type and PubMed</b> inform us whether the interaction was already experimentally 
+				validated, what type of experiment was performed and in which publication the interaction was reported.
+			</li>
+			<li>
+				The mRNA.org, <b>Pita</b>, <b>miRDB</b> and <b>TScan</b> columns display the percentile rank according 
+				to the scores obtained in the each predictor tool, as mentioned above.
+			</li>
+			<li>
+				The columns <b>HD</b> (<b>H</b>eart <b>D</b>evelopment) and <b>TF</b> (<b>T</b>ranscription <b>F</b>actors) 
+				provide indication whether the miRNAs targets were associated in the relevant processes based on their Gene 
+				Ontology Annotation (for the IDs GO:0007507 and GO:0003700, respectively).
+			</li>
+		</ul>
+		
+		<p>Finally, the user can select for which interactions the temporal expression profiles should be displayed by 
+		checking the box at the end of the row.</p>
+		
+		<img src="./images/HeartmiR2_1.png" border="0"/>
+		
+		<h1 style="color: #cc0000;">Expression Plots</h1>
+		
+		<p>The user of <b style="color: #cc0000;">Heart</b><b>miR</b> can plot any number of genes and miRNAs from the 
+		displayed interactions. To visualise the expression of a single miRNA-mRNA pair, the user can simply press the 
+		<b>plot</b> button of the desired interaction. Alternatively, it is possible to plot the expression of several 
+		elements from the table by selecting the desired elements on the "<b>Check for plot</b>" column and then press 
+		the <b>Plot Checked</b> button that can be found on the top of the table (See figure above, red arrow). 
+		Additionally, the user can pick interactions from the multiple tables and have them displayed by pressing 
+		the relevant <b>Plot</b> button (see figure below, red arrow), present at the end of the page.</p>
+		
+		<img src="./images/HeartmiR3_1.png" border="0"/>
+		
+		<p>In the plots, expression values for miR and mRNA are displayed in log2 scale. Each plot includes a cut 
+		off line of log2 equals 5 and mRNAs or miRs below this value were considered not expressed at the corresponding 
+		time point.</p>
+		
+		<p>Please note that the plots are interactive using the panel above the plots. For instance, one can zoom in 
+		or out, or display the expression values at a certain point. It is also possible to deselect or reselect the 
+		profiles and the cut-off line by clicking with the mouse on the relevant genes or miRs shown in the legend on 
+		the right side as seen in the example below. Plots can be saved as PNG files.</p>
+		
+		<img src="./images/HeartmiR4_1.png" border="0"/>
+		
+		<p>At the end of the page the user will find two buttons labelled <b>Filter</b> (see figure above, yellow arrow), 
+		which allows to increase the correlation stringency for Kendall or Kendall Dev measures. Please note if you 
+		try to lower the stringency by choosing a smaller correlation thresholds, the tables will remain unchanged. 
+		Here, you need to perform a new search with the lower threshold. Finally, the user can export the results 
+		into a tab delimited table, by pressing the <b>Download tables</b> button (see table figure above, black arrow).</p>
+		
+		<h1 style="color: #cc0000;">Heatmaps</h1>
+		
+		<p>Besides the expression plots, the user may also create <b>Expression heatmaps</b> provided by the tool using 
+		the expression values. This functionality provides an alternative for displaying the expression patterns (see 
+		figure below). The user can verify the expression values by hovering the mouse pointer on the heatmaps. 
+		Additionally, the user can zoom in and out in specific areas or  rescale back to default. Finally, the user 
+		can download the image as a PNG file.</p>
+		
+		<img src="./images/HeartmiR5.png" border="0"/>
+		
+		<h1 style="color: #cc0000;">Searching for specific correlations</h1>
+		
+		<p>Finally, it is also possible to query <b style="color: #cc0000;">Heart</b><b>miR</b> for a specific miR-mRNA 
+		validated or predicted interaction. For this, the user simply was to select the <b>Search correlation</b> button 
+		in the upper tab and then insert the  miR and mRNA identifiers  to specify  the interaction. If the interaction 
+		is found in the database, it will output information about the mRNA and miRNA, their correlation based on the 
+		experiment expression values and generates a plot which shows their expression during the experiment.</p>
+		
+		<img src="./images/HeartmiR6.png" border="0"/>
+		
+		<h1 style="color: #cc0000;">How can I report errors and/or make suggestions?</h1>
+		
+		<p>If you encounter an error in our tool, please contact us to the following e-mail address: <b>jppinto at ualg dot pt</b>
+		Additionally, we would be happy to hear your opinions, suggestions and comments about this resource. Please feel free to 
+		contact us at: <b>jppinto at ualg dot pt</b> or <b>mfutschik at ualg dot pt</b></p>
+	</div>
+	<br/><br/>
+	<ui:include src="header2.xhtml"/>
+
+
+</h:form>
+</h:body>
+</html>

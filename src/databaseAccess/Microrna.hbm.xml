@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 7/nov/2016 14:40:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="databaseAccess.Microrna" table="microrna" catalog="micorr">
+        <id name="id" type="java.lang.Integer">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <property name="ver20" type="string">
+            <column name="ver20" length="45" not-null="true" />
+        </property>
+        <property name="affyid" type="string">
+            <column name="affyid" length="45" not-null="true" />
+        </property>
+        <property name="tidarraydesgin" type="string">
+            <column name="tidarraydesgin" length="240" not-null="true" />
+        </property>
+        <property name="mirbase" type="string">
+            <column name="mirbase" length="45" />
+        </property>
+        <set name="micrornaexpressions" table="micrornaexpression" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="microrna_id" not-null="true" />
+            </key>
+            <one-to-many class="databaseAccess.Micrornaexpression" />
+        </set>
+        <set name="corrs" table="corr" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="microrna_id" not-null="true" />
+            </key>
+            <one-to-many class="databaseAccess.Corr" />
+        </set>
+    </class>
+</hibernate-mapping>
